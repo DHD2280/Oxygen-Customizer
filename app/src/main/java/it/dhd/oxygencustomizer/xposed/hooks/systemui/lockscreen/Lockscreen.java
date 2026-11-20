@@ -56,7 +56,6 @@ import it.dhd.oxygencustomizer.utils.StringFormatter;
 import it.dhd.oxygencustomizer.xposed.ResourceManager;
 import it.dhd.oxygencustomizer.xposed.XposedMods;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.HookHelper;
-import it.dhd.oxygencustomizer.xposed.utils.toolkit.Logger;
 import it.dhd.oxygencustomizer.xposed.utils.toolkit.ReflectedClass;
 
 public class Lockscreen extends XposedMods {
@@ -86,14 +85,16 @@ public class Lockscreen extends XposedMods {
     private String mFadeOutAnimDrawableField;
 
     private boolean mReceiverRegistered = false;
+    private boolean mNowBarExpanded = false;
+    private boolean mLockHiddenByNowBar = false;
     private final BroadcastReceiver mNowBarReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             boolean isExpanded = intent.getBooleanExtra("isExpanded", false);
+            if (mNowBarExpanded == isExpanded) return;
+            mNowBarExpanded = isExpanded;
             animateButtons(isExpanded);
-            if (isExpanded) {
-                hideLockIcon();
-            }
+            updateLockIconForNowBar();
         }
     };
 
@@ -351,6 +352,7 @@ public class Lockscreen extends XposedMods {
                             } catch (Throwable t) {
                                 log("Failed to load custom fingerprint icon: " + t.getMessage());
                             }
+                            executor.shutdown();
                         }
                     }, 0, 5, TimeUnit.SECONDS);
                 } catch (Throwable ignored) {
@@ -395,53 +397,29 @@ public class Lockscreen extends XposedMods {
             KeyguardBottomAreaView
                     .after("updateButton")
                     .run(param -> {
-                        if (!(removeLeftAffordance || removeRightAffordance)) return;
-                        ImageView view = (ImageView) param.args[0];
-                        if (view != null && view.getId() == mContext.getResources().getIdentifier("start_button", "id", listenPackage)) {
-                            mStartButton = view;
-                            if (removeLeftAffordance) {
-                                view.setVisibility(View.GONE);
-                            }
-                        } else if (view != null && view.getId() == mContext.getResources().getIdentifier("end_button", "id", listenPackage)) {
-                            mEndButton = view;
-                            if (removeRightAffordance) {
-                                view.setVisibility(View.GONE);
-                            }
+                        if (!(param.args[0] instanceof ImageView view)) return;
+                        if (view.getId() == mContext.getResources().getIdentifier("start_button", "id", listenPackage)) {
+                            bindAffordance(view, true);
+                        } else if (view.getId() == mContext.getResources().getIdentifier("end_button", "id", listenPackage)) {
+                            bindAffordance(view, false);
                         }
                     });
             KeyguardBottomAreaView
                     .after("access$updateButton")
-                    .run(param -> { // OOS 15.0.1 && 16
-                        if (!(removeLeftAffordance || removeRightAffordance)) return;
-                        ImageView view = (ImageView) ((Build.VERSION.SDK_INT >= 36) ? param.args[2] : param.args[1]);
-                        Object viewModel = (Build.VERSION.SDK_INT >= 36) ? param.args[3] : null;
-                        if (view != null) {
-                            if (Build.VERSION.SDK_INT >= 36) {
-                                String slotId = (String) getObjectField(viewModel, "slotId");
-                                if ("bottom_start".equals(slotId)) {
-                                    mStartButton = view;
-                                    if (removeLeftAffordance) {
-                                        view.setVisibility(View.GONE);
-                                    }
-                                } else if ("bottom_end".equals(slotId)) {
-                                    mEndButton = view;
-                                    if (removeRightAffordance) {
-                                        view.setVisibility(View.GONE);
-                                    }
-                                }
-                            } else {
-                                if (view.getId() == mContext.getResources().getIdentifier("start_button", "id", listenPackage)) {
-                                    mStartButton = view;
-                                    if (removeLeftAffordance) {
-                                        view.setVisibility(View.GONE);
-                                    }
-                                } else if (view.getId() == mContext.getResources().getIdentifier("end_button", "id", listenPackage)) {
-                                    mEndButton = view;
-                                    if (removeRightAffordance) {
-                                        view.setVisibility(View.GONE);
-                                    }
-                                }
+                    .run(param -> {
+                        Object arg = (Build.VERSION.SDK_INT >= 36) ? param.args[2] : param.args[1];
+                        if (!(arg instanceof ImageView view)) return;
+                        if (Build.VERSION.SDK_INT >= 36) {
+                            String slotId = (String) getObjectField(param.args[3], "slotId");
+                            if ("bottom_start".equals(slotId)) {
+                                bindAffordance(view, true);
+                            } else if ("bottom_end".equals(slotId)) {
+                                bindAffordance(view, false);
                             }
+                        } else if (view.getId() == mContext.getResources().getIdentifier("start_button", "id", listenPackage)) {
+                            bindAffordance(view, true);
+                        } else if (view.getId() == mContext.getResources().getIdentifier("end_button", "id", listenPackage)) {
+                            bindAffordance(view, false);
                         }
                     });
         } else {
@@ -465,6 +443,21 @@ public class Lockscreen extends XposedMods {
         }
     }
 
+    private void bindAffordance(View view, boolean start) {
+        if (start) mStartButton = view;
+        else mEndButton = view;
+        boolean removed = start ? removeLeftAffordance : removeRightAffordance;
+        if (removed || mNowBarExpanded) view.setVisibility(View.GONE);
+    }
+
+    private View startAffordance() {
+        return mStartAnimatable != null ? mStartAnimatable : mStartButton;
+    }
+
+    private View endAffordance() {
+        return mEndAnimatable != null ? mEndAnimatable : mEndButton;
+    }
+
     private void hookLockIcon() {
         try {
             ReflectedClass LockIconView = ReflectedClass.of("com.android.keyguard.LockIconView");
@@ -472,7 +465,7 @@ public class Lockscreen extends XposedMods {
                     .after("onFinishInflate")
                     .run(param -> {
                         mLockIcon = (View) param.thisObject;
-                        if (removeLockIcon) mLockIcon.setVisibility(View.GONE);
+                        if (removeLockIcon || mNowBarExpanded) mLockIcon.setVisibility(View.GONE);
                     });
         } catch (Throwable t) {
             log("LockIconView (keyguard) not found");
@@ -486,11 +479,11 @@ public class Lockscreen extends XposedMods {
             LockIconView
                     .after("onFinishInflate").run(param -> {
                         mLockIconView = (View) param.thisObject;
-                        if (removeLockIcon) mLockIconView.setVisibility(View.GONE);
+                        if (removeLockIcon || mNowBarExpanded) mLockIconView.setVisibility(View.GONE);
                     });
             LockIconView.after("onAttachedToWindow").run(param -> {
                 mLockIconView = (View) param.thisObject;
-                if (removeLockIcon) mLockIconView.setVisibility(View.GONE);
+                if (removeLockIcon || mNowBarExpanded) mLockIconView.setVisibility(View.GONE);
             });
         }
 
@@ -603,59 +596,66 @@ public class Lockscreen extends XposedMods {
     }
 
     private void animateButtons(boolean isExpanded) {
-        Logger.log("animateButtons: " + isExpanded);
         if (removeLeftAffordance && removeRightAffordance) return;
+        View start = removeLeftAffordance ? null : startAffordance();
+        View end = removeRightAffordance ? null : endAffordance();
         if (isExpanded) {
-            if (mStartAnimatable != null) {
-                mStartAnimatable
-                        .animate()
-                        .scaleX(0.4f)
-                        .scaleY(0.4f)
-                        .alpha(0f)
-                        .setDuration(175L)
-                        .setInterpolator(new FastOutLinearInInterpolator())
-                        .withEndAction(() -> mStartAnimatable.setVisibility(View.GONE))
-                        .start();
-            }
-            if (mEndAnimatable != null) {
-                mEndAnimatable
-                        .animate()
-                        .scaleX(0.4f)
-                        .scaleY(0.4f)
-                        .alpha(0f)
-                        .setDuration(175L)
-                        .setInterpolator(new FastOutLinearInInterpolator())
-                        .withEndAction(() -> mEndAnimatable.setVisibility(View.GONE))
-                        .start();
-            }
+            hideAffordance(start);
+            hideAffordance(end);
         } else {
-            if (!isLeftAffordanceHidden(mContext, removeLeftAffordance) && mStartAnimatable != null) {
-                mStartAnimatable.setVisibility(View.VISIBLE);
-                mStartAnimatable.setScaleX(0.4f);
-                mStartAnimatable.setScaleY(0.4f);
-                mStartAnimatable.setAlpha(0f);
-                mStartAnimatable.animate()
-                        .scaleX(1f)
-                        .scaleY(1f)
-                        .alpha(1f)
-                        .setDuration(300L)
-                        .setInterpolator(new FastOutLinearInInterpolator())
-                        .start();
-            }
-            if (!removeRightAffordance && mEndAnimatable != null) {
-                mEndAnimatable.setVisibility(View.VISIBLE);
-                mEndAnimatable.setScaleX(0.4f);
-                mEndAnimatable.setScaleY(0.4f);
-                mEndAnimatable.setAlpha(0f);
-                mEndAnimatable.animate()
-                        .scaleX(1f)
-                        .scaleY(1f)
-                        .alpha(1f)
-                        .setDuration(300L)
-                        .setInterpolator(new FastOutLinearInInterpolator())
-                        .start();
-            }
+            if (!isLeftAffordanceHidden(mContext, removeLeftAffordance)) showAffordance(start);
+            showAffordance(end);
         }
+    }
+
+    private void hideAffordance(View view) {
+        if (view == null) return;
+        view.animate()
+                .scaleX(0.4f)
+                .scaleY(0.4f)
+                .alpha(0f)
+                .setDuration(175L)
+                .setInterpolator(new FastOutLinearInInterpolator())
+                .withEndAction(() -> {
+                    if (mNowBarExpanded) view.setVisibility(View.GONE);
+                })
+                .start();
+    }
+
+    private void showAffordance(View view) {
+        if (view == null) return;
+        view.animate().cancel();
+        view.setVisibility(View.VISIBLE);
+        view.setScaleX(0.4f);
+        view.setScaleY(0.4f);
+        view.setAlpha(0f);
+        view.animate()
+                .scaleX(1f)
+                .scaleY(1f)
+                .alpha(1f)
+                .setDuration(300L)
+                .setInterpolator(new FastOutLinearInInterpolator())
+                .start();
+    }
+
+    private void updateLockIconForNowBar() {
+        if (removeLockIcon) return;
+        if (mNowBarExpanded) {
+            mLockHiddenByNowBar = setLockIconVisibility(View.GONE) || mLockHiddenByNowBar;
+        } else if (mLockHiddenByNowBar) {
+            mLockHiddenByNowBar = false;
+            setLockIconVisibility(View.VISIBLE);
+        }
+    }
+
+    private boolean setLockIconVisibility(int visibility) {
+        boolean changed = false;
+        for (View view : new View[]{mLockIcon, mLockIconContaier, mLockIconView}) {
+            if (view == null) continue;
+            view.setVisibility(visibility);
+            changed = true;
+        }
+        return changed;
     }
 
     private void hideLockIcon() {
