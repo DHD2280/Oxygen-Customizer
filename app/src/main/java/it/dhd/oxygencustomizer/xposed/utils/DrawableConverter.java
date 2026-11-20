@@ -18,6 +18,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.VectorDrawable;
+import android.os.Build;
 import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.renderscript.RenderScript;
@@ -190,26 +191,73 @@ public class DrawableConverter {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        Bitmap bitmap = Bitmap.createBitmap(
-                image.getWidth(), image.getHeight(),
-                Bitmap.Config.ARGB_8888);
-        RenderScript renderScript = RenderScript.create(context);
-        Allocation blurInput = Allocation.createFromBitmap(renderScript, image);
-        Allocation blurOutput = Allocation.createFromBitmap(renderScript, bitmap);
-
-        ScriptIntrinsicBlur blur = ScriptIntrinsicBlur.create(renderScript,
-                Element.U8_4(renderScript));
-        blur.setInput(blurInput);
-        if (radius > 25) {
-            radius = 25;
+        float clamped = Math.max(0.1f, Math.min(25f, radius));
+        if (Build.VERSION.SDK_INT >= 37) return softwareBlur(image, clamped);
+        try {
+            Bitmap bitmap = Bitmap.createBitmap(image.getWidth(), image.getHeight(), Bitmap.Config.ARGB_8888);
+            RenderScript renderScript = RenderScript.create(context);
+            Allocation blurInput = Allocation.createFromBitmap(renderScript, image);
+            Allocation blurOutput = Allocation.createFromBitmap(renderScript, bitmap);
+            ScriptIntrinsicBlur blur = ScriptIntrinsicBlur.create(renderScript, Element.U8_4(renderScript));
+            blur.setInput(blurInput);
+            blur.setRadius(clamped);
+            blur.forEach(blurOutput);
+            blurOutput.copyTo(bitmap);
+            renderScript.destroy();
+            return bitmap;
+        } catch (Throwable t) {
+            return softwareBlur(image, clamped);
         }
-        blur.setRadius(radius); // radius must be 0 < r <= 25
-        blur.forEach(blurOutput);
-        blurOutput.copyTo(bitmap);
-        renderScript.destroy();
+    }
 
-        return bitmap;
+    private static Bitmap softwareBlur(Bitmap image, float radius) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+        int scale = radius >= 8f ? 4 : 2;
+        int smallWidth = Math.max(1, width / scale);
+        int smallHeight = Math.max(1, height / scale);
+        Bitmap small = Bitmap.createScaledBitmap(image, smallWidth, smallHeight, true);
+        if (small.getConfig() != Bitmap.Config.ARGB_8888 || !small.isMutable() || small == image)
+            small = small.copy(Bitmap.Config.ARGB_8888, true);
+        int boxRadius = Math.max(1, Math.round(radius / scale));
+        int[] pixels = new int[smallWidth * smallHeight];
+        int[] buffer = new int[pixels.length];
+        small.getPixels(pixels, 0, smallWidth, 0, 0, smallWidth, smallHeight);
+        for (int pass = 0; pass < 3; pass++) {
+            boxBlur(pixels, buffer, smallWidth, smallHeight, boxRadius, true);
+            boxBlur(buffer, pixels, smallWidth, smallHeight, boxRadius, false);
+        }
+        small.setPixels(pixels, 0, smallWidth, 0, 0, smallWidth, smallHeight);
+        return Bitmap.createScaledBitmap(small, width, height, true);
+    }
+
+    private static void boxBlur(int[] in, int[] out, int width, int height, int radius, boolean horizontal) {
+        int lines = horizontal ? height : width;
+        int length = horizontal ? width : height;
+        int window = radius * 2 + 1;
+        for (int line = 0; line < lines; line++) {
+            int a = 0, r = 0, g = 0, b = 0;
+            for (int i = -radius; i <= radius; i++) {
+                int color = in[index(line, Math.max(0, Math.min(length - 1, i)), width, horizontal)];
+                a += color >>> 24;
+                r += (color >> 16) & 0xFF;
+                g += (color >> 8) & 0xFF;
+                b += color & 0xFF;
+            }
+            for (int i = 0; i < length; i++) {
+                out[index(line, i, width, horizontal)] = ((a / window) << 24) | ((r / window) << 16) | ((g / window) << 8) | (b / window);
+                int removed = in[index(line, Math.max(0, i - radius), width, horizontal)];
+                int added = in[index(line, Math.min(length - 1, i + radius + 1), width, horizontal)];
+                a += (added >>> 24) - (removed >>> 24);
+                r += ((added >> 16) & 0xFF) - ((removed >> 16) & 0xFF);
+                g += ((added >> 8) & 0xFF) - ((removed >> 8) & 0xFF);
+                b += (added & 0xFF) - (removed & 0xFF);
+            }
+        }
+    }
+
+    private static int index(int line, int position, int width, boolean horizontal) {
+        return horizontal ? line * width + position : position * width + line;
     }
 
     /**
