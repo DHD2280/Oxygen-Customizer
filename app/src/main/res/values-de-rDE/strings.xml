@@ -343,6 +343,7 @@
     <!-- Album art filter -->
     <!-- Depth Effect Alert -->
     <!-- Lockscreen Clock Strings -->
+    <!-- Fuzzy clock -->
     <!-- Lockscreen 9 Strings -->
     <!-- Aod Strings -->
     <!-- Aod Clock -->
@@ -383,6 +384,7 @@
     <!-- Device Widgets -->
     <!-- Battery Widget -->
     <!-- Weather Widget -->
+    <!-- Clock face data -->
     <!-- Lockscreen Now Bar -->
     <!-- Now Bar Notifications string -->
     <!-- Lockscreen Peek Notifications Strings -->
@@ -400,4 +402,6 @@
     <!-- Separate qs layout -->
     <!-- Icon Packs -->
     <!-- Icon Packs -->
+    <!-- Notification style packs -->
+    <!-- Clock designer -->
 </resources>

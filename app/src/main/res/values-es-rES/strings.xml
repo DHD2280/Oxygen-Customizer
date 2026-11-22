@@ -715,6 +715,7 @@
     <string name="lockscreen_stock_clock_red_one_color">Color para 1 en reloj</string>
     <string name="welcome_back">Te damos la bienvenida de regreso</string>
     <string name="default_user_name">Usuario</string>
+    <!-- Fuzzy clock -->
     <!-- Lockscreen 9 Strings -->
     <string name="lockscreen_9_time_title">La hora es</string>
     <string name="lockscreen_9_calendar">Calendario</string>
@@ -1102,6 +1103,7 @@
     <!-- Device Widgets -->
     <!-- Battery Widget -->
     <!-- Weather Widget -->
+    <!-- Clock face data -->
     <!-- Lockscreen Now Bar -->
     <!-- Now Bar Notifications string -->
     <!-- Lockscreen Peek Notifications Strings -->
@@ -1130,11 +1132,6 @@
     <!-- Separate qs layout -->
     <!-- Icon Packs -->
     <!-- Icon Packs -->
-    <string name="panorama_category">Vista sin límites</string>
-    <string name="panorama_three_split_title">Tres paneles</string>
-    <string name="panorama_three_split_summary">1 arriba · 2 abajo · tres apps</string>
-    <string name="panorama_floating_windows_title">Ventanas flotantes</string>
-    <string name="panorama_floating_windows_summary">Varias ventanas a la vez</string>
-    <string name="panorama_max_windows_title">Límite de visualización</string>
-    <string name="panorama_reboot_info">Reinicia el teléfono para aplicar</string>
+    <!-- Notification style packs -->
+    <!-- Clock designer -->
 </resources>

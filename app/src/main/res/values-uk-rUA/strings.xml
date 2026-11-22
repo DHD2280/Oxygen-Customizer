@@ -872,6 +872,7 @@
     <string name="lockscreen_stock_clock_red_one_color">Колір для 1 в годиннику</string>
     <string name="welcome_back">З Поверненням</string>
     <string name="default_user_name">Користувач</string>
+    <!-- Fuzzy clock -->
     <!-- Lockscreen 9 Strings -->
     <string name="lockscreen_9_time_title">Час</string>
     <string name="lockscreen_9_calendar">Календар</string>
@@ -1368,6 +1369,7 @@
     <!-- Weather Widget -->
     <string name="weather_widget_temperature">Поточна температура</string>
     <string name="weather_widget_humidity">Вологість</string>
+    <!-- Clock face data -->
     <!-- Lockscreen Now Bar -->
     <string name="lockscreen_now_bar_title">Панель \"Зараз\" Заблокованого екрана</string>
     <string name="lockscreen_now_bar_enabled_title">Увімкнути панель \"Зараз\" на Заблокованому екрані</string>
@@ -1509,4 +1511,6 @@
     <string name="height">Висота</string>
     <!-- Icon Packs -->
     <!-- Icon Packs -->
+    <!-- Notification style packs -->
+    <!-- Clock designer -->
 </resources>

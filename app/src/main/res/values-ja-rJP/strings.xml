@@ -699,6 +699,7 @@
     <string name="lockscreen_stock_clock_red_one_disable">赤い 1 を無効化</string>
     <string name="lockscreen_stock_clock_red_one_color">時計の 1 の色</string>
     <string name="default_user_name">ユーザー</string>
+    <!-- Fuzzy clock -->
     <!-- Lockscreen 9 Strings -->
     <string name="lockscreen_9_time_title">時間は</string>
     <string name="lockscreen_9_calendar">カレンダー</string>
@@ -1122,6 +1123,7 @@
     <!-- Device Widgets -->
     <!-- Battery Widget -->
     <!-- Weather Widget -->
+    <!-- Clock face data -->
     <!-- Lockscreen Now Bar -->
     <!-- Now Bar Notifications string -->
     <!-- Lockscreen Peek Notifications Strings -->
@@ -1156,11 +1158,6 @@
     <!-- Separate qs layout -->
     <!-- Icon Packs -->
     <!-- Icon Packs -->
-    <string name="panorama_category">バウンドレスビュー</string>
-    <string name="panorama_three_split_title">3分割</string>
-    <string name="panorama_three_split_summary">上1・下2 · 3つのアプリを配置</string>
-    <string name="panorama_floating_windows_title">マルチウィンドウ</string>
-    <string name="panorama_floating_windows_summary">複数の小ウィンドウを同時に表示</string>
-    <string name="panorama_max_windows_title">表示数の上限</string>
-    <string name="panorama_reboot_info">変更後は再起動が必要です</string>
+    <!-- Notification style packs -->
+    <!-- Clock designer -->
 </resources>

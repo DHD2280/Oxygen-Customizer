@@ -714,6 +714,7 @@
     <string name="lockscreen_stock_clock_red_one_disable">禁用紅色的1</string>
     <string name="lockscreen_stock_clock_red_one_color">時鐘中1的顏色</string>
     <string name="default_user_name">使用者</string>
+    <!-- Fuzzy clock -->
     <!-- Lockscreen 9 Strings -->
     <string name="lockscreen_9_time_title">時間是</string>
     <string name="lockscreen_9_calendar">日曆</string>
@@ -1142,6 +1143,7 @@
     <!-- Device Widgets -->
     <!-- Battery Widget -->
     <!-- Weather Widget -->
+    <!-- Clock face data -->
     <!-- Lockscreen Now Bar -->
     <!-- Now Bar Notifications string -->
     <!-- Lockscreen Peek Notifications Strings -->
@@ -1168,11 +1170,6 @@
     <!-- Separate qs layout -->
     <!-- Icon Packs -->
     <!-- Icon Packs -->
-    <string name="panorama_category">視野無界</string>
-    <string name="panorama_three_split_title">三分屏</string>
-    <string name="panorama_three_split_summary">上 1 下 2 · 可拖入三個應用</string>
-    <string name="panorama_floating_windows_title">多浮窗</string>
-    <string name="panorama_floating_windows_summary">小窗可以同時存在多個</string>
-    <string name="panorama_max_windows_title">顯示數量上限</string>
-    <string name="panorama_reboot_info">修改後需重新啟動手機生效</string>
+    <!-- Notification style packs -->
+    <!-- Clock designer -->
 </resources>

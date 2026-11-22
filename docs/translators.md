@@ -28,18 +28,18 @@ Thanks to these translators and proofreaders, this project exists:
         <sub><b>5542 words</b></sub>
       </td>
       <td align="center" valign="top">
+        <a href="https://crowdin.com/profile/tugaia56"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/34554/medium/13a9069eceb68ca3660733fafd962241.png" />
+          <br />
+          <sub><b>tugaia56</b></sub></a>
+        <br />
+        <sub><b>4930 words</b></sub>
+      </td>
+      <td align="center" valign="top">
         <a href="https://crowdin.com/profile/n01se"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/12428032/medium/6e7df0f3d3fc03695e6693c9a9c6f5da.png" />
           <br />
           <sub><b>White Noise (n01se)</b></sub></a>
         <br />
         <sub><b>4861 words</b></sub>
-      </td>
-      <td align="center" valign="top">
-        <a href="https://crowdin.com/profile/tugaia56"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/34554/medium/13a9069eceb68ca3660733fafd962241.png" />
-          <br />
-          <sub><b>tugaia56</b></sub></a>
-        <br />
-        <sub><b>4761 words</b></sub>
       </td>
       <td align="center" valign="top">
         <a href="https://crowdin.com/profile/muhammadbahaa2001"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/15231004/medium/1f277872da157dce11a9a6d1fc9120b6.png" />
@@ -102,6 +102,13 @@ Thanks to these translators and proofreaders, this project exists:
         <sub><b>2455 words</b></sub>
       </td>
       <td align="center" valign="top">
+        <a href="https://crowdin.com/profile/Ai686Leo"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/17613906/medium/3e04d2ab12e56dd2a5dfc39ef6138f80.jpg" />
+          <br />
+          <sub><b>Ai686Leo</b></sub></a>
+        <br />
+        <sub><b>2386 words</b></sub>
+      </td>
+      <td align="center" valign="top">
         <a href="https://crowdin.com/profile/Andfi"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/14343672/medium/ed27e5384b37aa115724c44156d4ea58_default.png" />
           <br />
           <sub><b>Andfi</b></sub></a>
@@ -129,6 +136,8 @@ Thanks to these translators and proofreaders, this project exists:
         <br />
         <sub><b>1448 words</b></sub>
       </td>
+    </tr>
+    <tr>
       <td align="center" valign="top">
         <a href="https://crowdin.com/profile/elimani0411"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/12897637/medium/5b1f68860654069044e13cf15e784ac8.jpg" />
           <br />
@@ -136,19 +145,10 @@ Thanks to these translators and proofreaders, this project exists:
         <br />
         <sub><b>1015 words</b></sub>
       </td>
-    </tr>
-    <tr>
-      <td align="center" valign="top">
-        <a href="https://crowdin.com/profile/Ai686Leo"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/17613906/medium/e01b0af5f85cef026cf97de043376e71.png" />
-          <br />
-          <sub><b>Ai686Leo</b></sub></a>
-        <br />
-        <sub><b>594 words</b></sub>
-      </td>
       <td align="center" valign="top">
         <a href="https://crowdin.com/profile/luigimak"><img alt="logo" style="width: 32px" src="https://crowdin-static.cf-downloads.crowdin.com/avatar/14047242/medium/ed318c8597ebed1bd6839d1f819f1766.jpeg" />
           <br />
-          <sub><b>Luigi Maccarrone (luigimak)</b></sub></a>
+          <sub><b>Luigi (luigimak)</b></sub></a>
         <br />
         <sub><b>341 words</b></sub>
       </td>

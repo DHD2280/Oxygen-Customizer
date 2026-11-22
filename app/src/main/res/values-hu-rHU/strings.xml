@@ -872,6 +872,7 @@
     <string name="lockscreen_stock_clock_red_one_color">Szín az órában</string>
     <string name="welcome_back">Örülünk, hogy visszatért!</string>
     <string name="default_user_name">Felhasználó</string>
+    <!-- Fuzzy clock -->
     <!-- Lockscreen 9 Strings -->
     <string name="lockscreen_9_time_title">Az idő</string>
     <string name="lockscreen_9_calendar">Naptár</string>
@@ -1368,6 +1369,7 @@
     <!-- Weather Widget -->
     <string name="weather_widget_temperature">Aktuális hőmérséklet</string>
     <string name="weather_widget_humidity">Páratartalom</string>
+    <!-- Clock face data -->
     <!-- Lockscreen Now Bar -->
     <string name="lockscreen_now_bar_title">A képernyőzár \'Most sáv\'-ja</string>
     <string name="lockscreen_now_bar_enabled_title">Engedélyezi a \'Most sáv\'-ot a záróképernyőn</string>
@@ -1508,4 +1510,6 @@
     <string name="height">Magasság</string>
     <!-- Icon Packs -->
     <!-- Icon Packs -->
+    <!-- Notification style packs -->
+    <!-- Clock designer -->
 </resources>

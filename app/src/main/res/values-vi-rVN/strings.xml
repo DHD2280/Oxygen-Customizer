@@ -913,6 +913,7 @@
     <string name="lockscreen_stock_clock_red_one_color">Màu cho số 1 trong đồng hồ</string>
     <string name="welcome_back">Chào mừng trở lại</string>
     <string name="default_user_name">Người dùng</string>
+    <!-- Fuzzy clock -->
     <!-- Lockscreen 9 Strings -->
     <string name="lockscreen_9_time_title">Bây giờ là</string>
     <string name="lockscreen_9_calendar">Lịch</string>
@@ -1410,6 +1411,7 @@ Gói không phản hồi nghĩa là ứng dụng có thể chưa được bật 
     <!-- Weather Widget -->
     <string name="weather_widget_temperature">Nhiệt độ hiện tại</string>
     <string name="weather_widget_humidity">Độ ẩm</string>
+    <!-- Clock face data -->
     <!-- Lockscreen Now Bar -->
     <string name="lockscreen_now_bar_title">Thanh Now màn hình khóa</string>
     <string name="lockscreen_now_bar_enabled_title">Bật thanh thông báo Now trên màn hình khóa</string>
@@ -1552,4 +1554,6 @@ Lưu ý: không phải tất cả trình phát đều được hỗ trợ.</stri
     <string name="height">Chiều cao</string>
     <!-- Icon Packs -->
     <!-- Icon Packs -->
+    <!-- Notification style packs -->
+    <!-- Clock designer -->
 </resources>

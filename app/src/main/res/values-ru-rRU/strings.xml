@@ -901,6 +901,7 @@
     <string name="lockscreen_stock_clock_red_one_color">Цвет в течение 1 часа</string>
     <string name="welcome_back">С возвращением</string>
     <string name="default_user_name">Пользователь</string>
+    <!-- Fuzzy clock -->
     <!-- Lockscreen 9 Strings -->
     <string name="lockscreen_9_time_title">Время</string>
     <string name="lockscreen_9_calendar">Календарь</string>
@@ -1402,6 +1403,7 @@
     <!-- Weather Widget -->
     <string name="weather_widget_temperature">Текущая температура</string>
     <string name="weather_widget_humidity">Влажность</string>
+    <!-- Clock face data -->
     <!-- Lockscreen Now Bar -->
     <string name="lockscreen_now_bar_title">Now Bar на экране блокировки</string>
     <string name="lockscreen_now_bar_enabled_title">Вкл. Now Bar на экране блокировки</string>
@@ -1543,11 +1545,6 @@
     <string name="height">Высота</string>
     <!-- Icon Packs -->
     <!-- Icon Packs -->
-    <string name="panorama_category">Безграничный вид</string>
-    <string name="panorama_three_split_title">Три части</string>
-    <string name="panorama_three_split_summary">1 сверху · 2 снизу · три приложения</string>
-    <string name="panorama_floating_windows_title">Плавающие окна</string>
-    <string name="panorama_floating_windows_summary">Несколько окон одновременно</string>
-    <string name="panorama_max_windows_title">Лимит отображения</string>
-    <string name="panorama_reboot_info">Перезагрузите телефон для применения</string>
+    <!-- Notification style packs -->
+    <!-- Clock designer -->
 </resources>

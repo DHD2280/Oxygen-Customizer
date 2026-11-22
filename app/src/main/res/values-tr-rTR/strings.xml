@@ -922,6 +922,7 @@
     <string name="lockscreen_stock_clock_red_one_color">Saatteki \'1\' Rakamının Rengi</string>
     <string name="welcome_back">Tekrar Hoş Geldin</string>
     <string name="default_user_name">Kullanıcı</string>
+    <!-- Fuzzy clock -->
     <!-- Lockscreen 9 Strings -->
     <string name="lockscreen_9_time_title">Saat şu an</string>
     <string name="lockscreen_9_calendar">Takvim</string>
@@ -1422,6 +1423,7 @@
     <!-- Weather Widget -->
     <string name="weather_widget_temperature">Mevcut sıcaklık</string>
     <string name="weather_widget_humidity">Nem oranı</string>
+    <!-- Clock face data -->
     <!-- Lockscreen Now Bar -->
     <string name="lockscreen_now_bar_title">Kilit Ekranı Now Bar</string>
     <string name="lockscreen_now_bar_enabled_title">Now Bar\'ı Etkinleştir</string>
@@ -1580,4 +1582,6 @@
     <string name="no_icon_pack_installed">Yüklü simge paketi yok</string>
     <string name="icon_pack_disclaimer_title">Yasal Uyarı</string>
     <string name="icon_pack_disclaimer_desc">Simge paketleri OxygenCustomizer ekibi tarafından geliştirilmemekte ve dağıtılmamaktadır. Bu nedenle ekibimiz simge paketlerine doğrudan teknik destek sağlayamaz. Simge paketlerinin entegrasyonuyla ilgili teknik destek yalnızca paketlerin kendi geliştiricilerine verilecektir.\n\nKendi simge paketinizi derlemek için gereken yönergelere şuradan ulaşabilirsiniz: %s</string>
+    <!-- Notification style packs -->
+    <!-- Clock designer -->
 </resources>

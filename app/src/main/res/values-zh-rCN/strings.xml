@@ -850,6 +850,7 @@
     <string name="lockscreen_stock_clock_red_one_color">时钟中1的颜色</string>
     <string name="welcome_back">欢迎回来</string>
     <string name="default_user_name">用户</string>
+    <!-- Fuzzy clock -->
     <!-- Lockscreen 9 Strings -->
     <string name="lockscreen_9_time_title">时间是</string>
     <string name="lockscreen_9_calendar">日历</string>
@@ -1299,6 +1300,7 @@
     <string name="remove_widget">删除</string>
     <!-- Battery Widget -->
     <!-- Weather Widget -->
+    <!-- Clock face data -->
     <!-- Lockscreen Now Bar -->
     <string name="lockscreen_now_bar_weather">显示天气</string>
     <string name="lockscreen_now_bar_notifications">显示通知</string>
@@ -1344,11 +1346,6 @@
     <!-- Separate qs layout -->
     <!-- Icon Packs -->
     <!-- Icon Packs -->
-    <string name="panorama_category">视野无界</string>
-    <string name="panorama_three_split_title">三分屏</string>
-    <string name="panorama_three_split_summary">上 1 下 2 · 可拖入三个应用</string>
-    <string name="panorama_floating_windows_title">多浮窗</string>
-    <string name="panorama_floating_windows_summary">小窗可以同时存在多个</string>
-    <string name="panorama_max_windows_title">显示数量上限</string>
-    <string name="panorama_reboot_info">修改后需重启手机生效</string>
+    <!-- Notification style packs -->
+    <!-- Clock designer -->
 </resources>
