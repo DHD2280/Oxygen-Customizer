@@ -50,6 +50,47 @@
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
     <it.dhd.oneplusui.preference.OplusPreferenceCategory
+        android:key="tile_border_17"
+        android:title="@string/qs_tile_border_category_title">
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:key="qs_tile_border_enabled"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/qs_tile_border_title"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oneplusui.preference.OplusSliderPreference
+            android:dependency="qs_tile_border_enabled"
+            android:key="qs_tile_border_width"
+            android:title="@string/qs_tile_border_width_title"
+            app:defaultValue="1"
+            app:maxVal="6"
+            app:minVal="1"
+            app:tickInterval="1"
+            app:valueFormat="dp" />
+
+        <it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference
+            android:defaultValue="0x59ffffff"
+            android:dependency="qs_tile_border_enabled"
+            android:key="qs_tile_border_color"
+            android:title="@string/qs_tile_border_color_title"
+            app:cpv_showAlphaSlider="true"
+            app:iconSpaceReserved="false" />
+
+        <it.dhd.oneplusui.preference.OplusSwitchPreference
+            android:defaultValue="false"
+            android:dependency="qs_tile_border_enabled"
+            android:key="qs_tile_border_active"
+            android:summaryOff="@string/general_off"
+            android:summaryOn="@string/general_on"
+            android:title="@string/qs_tile_border_active_title"
+            app:iconSpaceReserved="false" />
+
+    </it.dhd.oneplusui.preference.OplusPreferenceCategory>
+
+    <it.dhd.oneplusui.preference.OplusPreferenceCategory
         app:iconSpaceReserved="false">
 
         <it.dhd.oneplusui.preference.OplusJumpPreference

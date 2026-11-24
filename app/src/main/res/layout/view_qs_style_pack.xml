@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/style_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/preference_card_margin_horizontal"
+    android:layout_marginTop="10dp"
+    android:background="@drawable/preference_background_center"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <it.dhd.oxygencustomizer.ui.views.QsStylePreviewView
+        android:id="@+id/style_preview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp" />
+
+    <ImageView
+        android:id="@+id/style_preview_image"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginBottom="4dp"
+        android:scaleType="fitCenter"
+        android:visibility="gone"
+        tools:ignore="ContentDescription" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/style_title"
+            style="@style/TextAppearance.Material3.TitleMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center"
+            android:textColor="@color/text_color_primary" />
+
+        <ImageView
+            android:id="@+id/style_selected"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_gravity="start|center"
+            android:layout_marginHorizontal="8dp"
+            android:src="@drawable/ic_tick"
+            android:visibility="invisible"
+            app:tint="?attr/colorPrimary" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/style_desc"
+        style="@style/TextAppearance.Material3.BodyMedium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textColor="@color/text_color_secondary" />
+
+</LinearLayout>
