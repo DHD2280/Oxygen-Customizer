@@ -1835,6 +1835,18 @@
     <string name="notification_style_pack_reset">Reset style</string>
     <string name="no_notification_style_pack_installed">No notification style pack installed</string>
     <string name="notification_style_pack_desc">%1$s · %2$s</string>
+
+    <string name="qs_style_packs_title">QS style packs</string>
+    <string name="qs_style_pack_reset">Reset style</string>
+    <string name="no_qs_style_pack_installed">No QS style pack installed</string>
+    <string name="qs_style_pack_desc">%1$s · %2$s</string>
+    <string name="qs_style_pack_disclaimer_desc">QS style packs are not developed or distributed by OxygenCustomizer. As such, the OxygenCustomizer team is unable to provide support for them. Support regarding how OxygenCustomizer handles QS style packs will only be provided to the respective pack developers.\n\nA pack declares one activity per style with the action it.dhd.oxygencustomizer.qsstyle, and a string-array named after that activity holding the style values.</string>
+    <string name="qs_tile_border_category_title">Tile edge</string>
+    <string name="qs_tile_border_title">Draw a tile edge</string>
+    <string name="qs_tile_border_width_title">Edge width</string>
+    <string name="qs_tile_border_color_title">Edge color</string>
+    <string name="qs_tile_border_active_title">Edge on active tiles</string>
+    <string name="qs_tile_border_pack_active">A QS style pack is applied, so it owns the tile edge</string>
     <string name="notification_style_pack_disclaimer_desc">Notification style packs are not developed or distributed by OxygenCustomizer. As such, the OxygenCustomizer team is unable to provide support for them. Support regarding how OxygenCustomizer handles notification style packs will only be provided to the respective pack developers.
 
 For instructions on how to make a notification style pack, please refer to the template here: %s</string>

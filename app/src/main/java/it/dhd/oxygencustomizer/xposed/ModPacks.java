@@ -38,6 +38,7 @@ import it.dhd.oxygencustomizer.xposed.hooks.systemui.IconPacks;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.MediaPlayerObserver;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.MiscMods;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.NotificationStylePacks;
+import it.dhd.oxygencustomizer.xposed.hooks.systemui.QsStylePacks;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.OpDrawableUtils;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.OpUtils;
 import it.dhd.oxygencustomizer.xposed.hooks.systemui.PanelAnimationListener;
@@ -172,6 +173,7 @@ public class ModPacks {
                     modPacks.add(QSTransparency.class);
                     modPacks.add(QSTiles.class);
                     modPacks.add(QsTileCustomization.class);
+                    modPacks.add(QsStylePacks.class);
                     modPacks.add(SeparateQsCustomization.class);
                     modPacks.add(QsWidgets.class);
                     modPacks.add(QsMenuItems.class);

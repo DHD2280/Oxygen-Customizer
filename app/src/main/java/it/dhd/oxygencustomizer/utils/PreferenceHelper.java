@@ -228,6 +228,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomi
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_SLIDERS_RADIUS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_SLIDERS_RADIUS_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_SLIDERS_REMOVE_BLUR;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_STYLE_PACK;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ACTIVE_COLOR;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ACTIVE_COLOR_ENABLED;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ACTIVE_COLOR_HIGHLIGHT;
@@ -238,6 +239,7 @@ import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomi
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_STYLE;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_TRANSFORMATIONS;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_ANIMATION_TRANSFORMATIONS_SWITCH;
+import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_BORDER_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_CUSTOM_COLORS_SWITCH;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_CUSTOM_COLOR_ACTIVE_ACCENT;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_TILE_DISABLED_COLOR;
@@ -406,7 +408,8 @@ public class PreferenceHelper {
         if (instance == null) return true;
 
         switch (key) {
-            case LOCKSCREEN_DESIGNER_MODE, LOCKSCREEN_KEEP_LARGE_CLOCK -> {
+            case LOCKSCREEN_DESIGNER_MODE, LOCKSCREEN_KEEP_LARGE_CLOCK, "qs_style_packs",
+                 "tile_border_17" -> {
                 return Build.VERSION.SDK_INT >= 37;
             }
             case LOCKSCREEN_WEATHER_SWITCH,
@@ -1364,6 +1367,8 @@ public class PreferenceHelper {
                     !instance.mPreferences.getBoolean("lockscreen_fp_remove_icon", false);
             case QS_TILE_HIDE_LABELS ->
                     !instance.mPreferences.getBoolean(QS_TILE_LABELS_CUSTOM_COLOR_ENABLED, false);
+            case QS_TILE_BORDER_SWITCH ->
+                    TextUtils.isEmpty(instance.mPreferences.getString(QS_STYLE_PACK, ""));
             case QS_TILE_LABELS_CUSTOM_COLOR_ENABLED ->
                     !instance.mPreferences.getBoolean(QS_TILE_HIDE_LABELS, false);
             case QS_SLIDERS_BLEND_COLOR ->
@@ -1519,6 +1524,8 @@ public class PreferenceHelper {
             // Screen Off On Flat
             case "FlatStandbyTime" ->
                     String.format(fragmentCompat.getString(R.string.duration_seconds), instance.mPreferences.getSliderInt("FlatStandbyTime", 5));
+            case QS_TILE_BORDER_SWITCH ->
+                    TextUtils.isEmpty(instance.mPreferences.getString(QS_STYLE_PACK, "")) ? null : fragmentCompat.getString(R.string.qs_tile_border_pack_active);
 
             default -> null;
         };

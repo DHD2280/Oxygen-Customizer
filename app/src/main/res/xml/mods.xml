@@ -109,6 +109,13 @@
             android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.theming.notificationstyle.NotificationStylePackFragment"
             search:ignore="true" />
 
+        <it.dhd.oneplusui.preference.OplusJumpPreference
+            android:icon="@drawable/ic_qs"
+            android:key="qs_style_packs"
+            android:title="@string/qs_style_packs_title"
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.theming.qsstyle.QsStylePackFragment"
+            search:ignore="true" />
+
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>
 
 </PreferenceScreen>
