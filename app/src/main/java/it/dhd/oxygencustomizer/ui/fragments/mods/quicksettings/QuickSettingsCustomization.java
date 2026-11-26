@@ -2,16 +2,11 @@ package it.dhd.oxygencustomizer.ui.fragments.mods.quicksettings;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.text.TextUtils;
-
-import androidx.preference.Preference;
 
 import it.dhd.oneplusui.preference.OplusJumpPreference;
-import it.dhd.oneplusui.preference.OplusPreferenceCategory;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.ui.base.ControlledPreferenceFragmentCompat;
 import it.dhd.oxygencustomizer.utils.Constants;
-import it.dhd.oxygencustomizer.utils.OCPreferences;
 import it.dhd.oxygencustomizer.utils.PreferenceHelper;
 
 public class QuickSettingsCustomization extends ControlledPreferenceFragmentCompat {
@@ -60,20 +55,6 @@ public class QuickSettingsCustomization extends ControlledPreferenceFragmentComp
         }
         if (baseTile != null) {
             baseTile.setVisible(!shouldHide);
-        }
-
-        OplusPreferenceCategory tileBorder = findPreference("tile_border_17");
-        if (tileBorder != null) {
-            tileBorder.setVisible(Build.VERSION.SDK_INT >= 37);
-            // A selected pack owns the edge, so the manual controls would do nothing.
-            boolean packApplied = !TextUtils.isEmpty(OCPreferences.getString(
-                    Constants.Preferences.QsTilesCustomization.QS_STYLE_PACK, ""));
-            Preference borderSwitch = findPreference(
-                    Constants.Preferences.QsTilesCustomization.QS_TILE_BORDER_SWITCH);
-            if (borderSwitch != null) {
-                borderSwitch.setEnabled(!packApplied);
-                borderSwitch.setSummary(packApplied ? getString(R.string.qs_tile_border_pack_active) : null);
-            }
         }
 
     }

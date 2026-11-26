@@ -17,10 +17,6 @@ import androidx.annotation.Nullable;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.xposed.utils.QsStylePackUtil;
 
-/**
- * Three tiles drawn with a style's own values, so a pack needs no artwork to show up
- * correctly in the list.
- */
 public class QsStylePreviewView extends View {
 
     private static final float TILE_DP = 52f;

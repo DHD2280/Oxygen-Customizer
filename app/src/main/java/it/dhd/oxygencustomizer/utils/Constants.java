@@ -301,7 +301,6 @@ public final class Constants {
             public static final String QS_MEDIA_TILE_RADIUS = "qs_media_tile_custom_radius_enabled";
             public static final String QS_MEDIA_TILE_RADIUS_TOTAL = "qs_media_tile_custom_radius_total";
 
-            // Tile edge, OOS17
             public static final String QS_STYLE_PACK = "qs_style_pack";
             public static final String QS_TILE_BORDER_SWITCH = "qs_tile_border_enabled";
             public static final String QS_TILE_BORDER_WIDTH = "qs_tile_border_width";
