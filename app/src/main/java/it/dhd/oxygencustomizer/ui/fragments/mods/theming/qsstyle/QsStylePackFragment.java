@@ -1,5 +1,6 @@
 package it.dhd.oxygencustomizer.ui.fragments.mods.theming.qsstyle;
 
+import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
 import static it.dhd.oxygencustomizer.utils.Constants.Preferences.QsTilesCustomization.QS_STYLE_PACK;
 
 import android.content.Context;
@@ -33,6 +34,7 @@ import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.databinding.FragmentQsStylePackBinding;
 import it.dhd.oxygencustomizer.ui.adapters.QsStylePackAdapter;
 import it.dhd.oxygencustomizer.ui.base.BaseFragment;
+import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.utils.OCPreferences;
 import it.dhd.oxygencustomizer.xposed.utils.QsStylePackUtil;
 
@@ -62,10 +64,18 @@ public class QsStylePackFragment extends BaseFragment {
                         .setIcon(R.drawable.settingslib_ic_info_outline_24)
                         .setIconTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.textColorPrimary)))
                         .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+                menu.add(0, 2, 0, R.string.restart_scopes)
+                        .setIcon(R.drawable.ic_restart)
+                        .setIconTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.textColorPrimary)))
+                        .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
             }
 
             @Override
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                if (menuItem.getItemId() == 2) {
+                    AppUtils.restartScopes(requireActivity(), new String[]{SYSTEM_UI});
+                    return true;
+                }
                 if (menuItem.getItemId() != 1) return false;
                 new MaterialAlertDialogBuilder(requireContext())
                         .setTitle(R.string.icon_pack_disclaimer_title)

@@ -1,5 +1,8 @@
 package it.dhd.oxygencustomizer.ui.fragments.mods.theming.iconpack;
 
+import static android.R.id.message;
+import static it.dhd.oxygencustomizer.utils.Constants.Packages.SYSTEM_UI;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -11,6 +14,7 @@ import android.text.Editable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.util.Linkify;
 import android.util.Log;
@@ -22,9 +26,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
@@ -40,6 +46,7 @@ import it.dhd.oxygencustomizer.OxygenCustomizer;
 import it.dhd.oxygencustomizer.R;
 import it.dhd.oxygencustomizer.databinding.FragmentIconPackBinding;
 import it.dhd.oxygencustomizer.ui.base.BaseFragment;
+import it.dhd.oxygencustomizer.utils.AppUtils;
 import it.dhd.oxygencustomizer.xposed.utils.IconPackUtil;
 
 
@@ -81,17 +88,20 @@ public class IconPackFragment extends BaseFragment implements IconPackUtil.IconP
                         .setIcon(R.drawable.settingslib_ic_info_outline_24)
                         .setIconTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.textColorPrimary)))
                         .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+                menu.add(0, 3, 0, R.string.restart_scopes)
+                        .setIcon(R.drawable.ic_restart)
+                        .setIconTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.textColorPrimary)))
+                        .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
             }
 
             @Override
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
                 // Handle the menu selection
-                if (menuItem.getItemId() == 2) {
-                    new MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(requireContext().getString(R.string.icon_pack_disclaimer_title))
-                            .setMessage(getClickableText(requireActivity(), requireContext().getString(R.string.icon_pack_disclaimer_desc, PX_ICON_PACK_REPO), PX_ICON_PACK_REPO))
-                            .setPositiveButton(R.string.depth_effect_ok_btn, (dialog, which) -> dialog.dismiss())
-                            .show();
+                if (menuItem.getItemId() == 3) {
+                    AppUtils.restartScopes(requireActivity(), new String[]{SYSTEM_UI});
+                    return true;
+                } else if (menuItem.getItemId() == 2) {
+                    showLinkDialog(requireActivity(), requireContext().getString(R.string.icon_pack_disclaimer_desc, PX_ICON_PACK_REPO), PX_ICON_PACK_REPO);
                     return true;
                 } else if (menuItem.getItemId() == 1) {
                     if (binding.search.getVisibility() == View.VISIBLE) {
@@ -158,6 +168,16 @@ public class IconPackFragment extends BaseFragment implements IconPackUtil.IconP
     /**
      * @noinspection SameParameterValue
      */
+    public static void showLinkDialog(Activity activity, String body, String link) {
+        AlertDialog dialog = new MaterialAlertDialogBuilder(activity)
+                .setTitle(R.string.icon_pack_disclaimer_title)
+                .setMessage(getClickableText(activity, body, link))
+                .setPositiveButton(R.string.depth_effect_ok_btn, (d, which) -> d.dismiss())
+                .show();
+        TextView text = dialog.findViewById(message);
+        if (text != null) text.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
     @NonNull
     public static SpannableString getClickableText(Activity activity, String message, String link) {
         SpannableString spannableMessage = new SpannableString(message);

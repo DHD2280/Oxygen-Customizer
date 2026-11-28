@@ -23,8 +23,6 @@ import androidx.core.view.MenuProvider;
 import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -70,11 +68,7 @@ public class NotificationStylePackFragment extends BaseFragment {
             @Override
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
                 if (menuItem.getItemId() != 1) return false;
-                new MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(R.string.icon_pack_disclaimer_title)
-                        .setMessage(IconPackFragment.getClickableText(requireActivity(), getString(R.string.notification_style_pack_disclaimer_desc, NOTIFICATION_STYLE_TEMPLATE_REPO), NOTIFICATION_STYLE_TEMPLATE_REPO))
-                        .setPositiveButton(R.string.depth_effect_ok_btn, (dialog, which) -> dialog.dismiss())
-                        .show();
+                IconPackFragment.showLinkDialog(requireActivity(), getString(R.string.notification_style_pack_disclaimer_desc, NOTIFICATION_STYLE_TEMPLATE_REPO), NOTIFICATION_STYLE_TEMPLATE_REPO);
                 return true;
             }
         }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
