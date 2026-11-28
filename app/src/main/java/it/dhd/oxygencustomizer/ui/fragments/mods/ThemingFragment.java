@@ -28,7 +28,7 @@ import it.dhd.oxygencustomizer.ui.dialogs.LoadingDialog;
 import it.dhd.oxygencustomizer.ui.preferences.OplusColorPreference;
 import it.dhd.oxygencustomizer.utils.ColorUtils;
 
-public class ColorsFragment extends ControlledPreferenceFragmentCompat {
+public class ThemingFragment extends ControlledPreferenceFragmentCompat {
 
     private OplusColorPreference mPrimaryColor;
     private OplusPreference mApplyColors;
@@ -38,7 +38,7 @@ public class ColorsFragment extends ControlledPreferenceFragmentCompat {
 
     @Override
     public String getTitle() {
-        return getString(R.string.colors);
+        return getString(R.string.theming);
     }
 
     @Override
@@ -129,10 +129,10 @@ public class ColorsFragment extends ControlledPreferenceFragmentCompat {
             mSystemPalette = jsonObject.getString("android.theme.customization.system_palette");
             mAccentColor = jsonObject.getString("android.theme.customization.accent_color");
         } catch (JSONException e) {
-            Log.e("ColorsFragment", "Error parsing JSON", e);
+            Log.e("ThemingFragment", "Error parsing JSON", e);
         }
         if (TextUtils.isEmpty(mAccentColor)) {
-            Log.e("ColorsFragment", "Accent color is empty");
+            Log.e("ThemingFragment", "Accent color is empty");
             return;
         }
         if (!mAccentColor.contains("#")) {
@@ -152,7 +152,7 @@ public class ColorsFragment extends ControlledPreferenceFragmentCompat {
         if (mColorToApply == 0) return;
 
         mLoadingDialog.show(getString(R.string.loading_dialog_wait));
-        Log.d("ColorsFragment", "Applying color: " + String.format("#%08X", (0xFFFFFFFF & mColorToApply)));
+        Log.d("ThemingFragment", "Applying color: " + String.format("#%08X", (0xFFFFFFFF & mColorToApply)));
         generateColorFiles(String.format("#%08X", (0xFFFFFFFF & mColorToApply)));
         saveSecureSettings();
 
@@ -209,7 +209,7 @@ public class ColorsFragment extends ControlledPreferenceFragmentCompat {
     }
 
     private void writeToFile(String content, String fileName) {
-        Log.d("ColorsFragment", "Writing\n" + content + "\nto file: " + fileName);
+        Log.d("ThemingFragment", "Writing\n" + content + "\nto file: " + fileName);
         try {
             Shell.cmd("printf '" + content + "' > /data/oplus/uxres/uxcolor/" + fileName).exec();
         } catch (Exception e) {
@@ -244,7 +244,7 @@ public class ColorsFragment extends ControlledPreferenceFragmentCompat {
 
 
             String secureString = jsonObject.toString();
-            Log.d("ColorsFragment", "Applying secure settings: " + secureString);
+            Log.d("ThemingFragment", "Applying secure settings: " + secureString);
             Shell.cmd(
                     "settings put secure theme_customization_overlay_packages '" + secureString + "'"
             ).exec();

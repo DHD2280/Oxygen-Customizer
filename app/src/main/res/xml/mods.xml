@@ -83,9 +83,9 @@
 
         <it.dhd.oneplusui.preference.OplusJumpPreference
             android:icon="@drawable/ic_colors"
-            android:key="colors"
-            android:title="@string/colors"
-            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.ColorsFragment"
+            android:key="theming"
+            android:title="@string/theming"
+            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.ThemingFragment"
             search:ignore="true" />
 
         <it.dhd.oneplusui.preference.OplusJumpPreference
@@ -93,27 +93,6 @@
             android:key="misc"
             android:title="@string/misc"
             android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.Misc"
-            search:ignore="true" />
-
-        <it.dhd.oneplusui.preference.OplusJumpPreference
-            android:icon="@drawable/ic_icon_packs"
-            android:key="iconpacks"
-            android:title="@string/icon_packs_title"
-            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.theming.iconpack.IconPackFragment"
-            search:ignore="true" />
-
-        <it.dhd.oneplusui.preference.OplusJumpPreference
-            android:icon="@drawable/ic_notification_style"
-            android:key="notification_style_packs"
-            android:title="@string/notification_style_packs_title"
-            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.theming.notificationstyle.NotificationStylePackFragment"
-            search:ignore="true" />
-
-        <it.dhd.oneplusui.preference.OplusJumpPreference
-            android:icon="@drawable/ic_qs"
-            android:key="qs_style_packs"
-            android:title="@string/qs_style_packs_title"
-            android:fragment="it.dhd.oxygencustomizer.ui.fragments.mods.theming.qsstyle.QsStylePackFragment"
             search:ignore="true" />
 
     </it.dhd.oneplusui.preference.OplusPreferenceCategory>

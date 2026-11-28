@@ -151,6 +151,8 @@
     <string name="sound">Sound</string>
     <string name="misc">Miscellaneous</string>
     <string name="colors">Colors</string>
+    <string name="theming">Theming</string>
+    <string name="theming_packs">Packs</string>
     <string name="package_manager">Package Manager</string>
 
     <!-- General Strings -->
