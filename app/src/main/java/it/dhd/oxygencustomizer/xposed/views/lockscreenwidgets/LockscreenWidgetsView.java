@@ -93,6 +93,7 @@ public class LockscreenWidgetsView extends LinearLayout {
         mDeviceWidgetView.setDeviceName(devName);
         mDeviceWidgetView.setDeviceWidgetScaling(mWidgetsScale);
         mDeviceWidgetView.setWidgets(WidgetFactory.fromJson(customWidgets, mContext, false));
+        updateContainerVisibility();
     }
 
     public void setCustomColors(int widgetsStyle, boolean customColorsEnabled,
@@ -119,8 +120,9 @@ public class LockscreenWidgetsView extends LinearLayout {
     }
 
     private void updateContainerVisibility() {
-        mDeviceWidgetContainer.setVisibility(deviceWidgetsEnabled ? View.VISIBLE : View.GONE);
-        boolean isEmpty = mMainRow.isEmpty() && mSecondaryRow.isEmpty();
+        boolean showDevice = deviceWidgetsEnabled && !mDeviceWidgetView.getWidgetsList().isEmpty();
+        mDeviceWidgetContainer.setVisibility(showDevice ? View.VISIBLE : View.GONE);
+        boolean isEmpty = !showDevice && mMainRow.isEmpty() && mSecondaryRow.isEmpty();
         setVisibility(isEmpty || !lockscreenWidgetsEnabled ? View.GONE : View.VISIBLE);
     }
 
