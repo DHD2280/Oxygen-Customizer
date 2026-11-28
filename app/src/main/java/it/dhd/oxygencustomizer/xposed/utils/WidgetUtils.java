@@ -24,6 +24,7 @@ public class WidgetUtils {
     public static final String DATA_INACTIVE = "status_bar_qs_data_inactive";
     public static final String RINGER_NORMAL = "status_bar_qs_mute_inactive";
     public static final String RINGER_VIBRATE = "status_bar_qs_icon_volume_ringer_vibrate";
+    public static final String RINGER_VIBRATE_FALLBACK = "status_bar_qs_vibrate_active";
     public static final String RINGER_SILENT = "status_bar_qs_mute_active";
     public static final String RINGER_INACTIVE = "status_bar_qs_mute_active";
     public static final String TORCH_RES_ACTIVE = "status_bar_qs_flashlight_active";
@@ -62,6 +63,8 @@ public class WidgetUtils {
                 return ResourcesCompat.getDrawable(modRes, R.drawable.ic_calculator, mContext.getTheme());
             else if (drawableRes.equals(HOME_CONTROLS))
                 return getDrawable(mContext, "controls_icon", SYSTEM_UI);
+            else if (drawableRes.equals(RINGER_VIBRATE))
+                return getDrawable(mContext, RINGER_VIBRATE_FALLBACK, SYSTEM_UI);
 
             try {
                 log("WidgetUtils getDrawable " + drawableRes + " from " + pkg + " error " + t);
