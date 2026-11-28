@@ -24,7 +24,9 @@ import android.icu.util.Measure;
 import android.icu.util.MeasureUnit;
 import android.os.BatteryManager;
 import android.os.Build;
+import android.os.SystemClock;
 import android.provider.Settings;
+import android.text.Layout;
 import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -53,6 +55,8 @@ public class NowBarBattery extends RelativeLayout {
     private static final String POWER_SUPPLY = "/sys/class/power_supply/";
     private static final String[] CHARGER_SUPPLIES = {"usb", "wireless", "ac", "dc"};
     private static final long INFO_REFRESH_MS = 5000;
+    private static final long MARQUEE_DELAY_MS = 1200;
+    private static final float MARQUEE_DP_PER_SECOND = 30f;
 
     private final Context mContext;
     private Context appContext;
@@ -92,6 +96,11 @@ public class NowBarBattery extends RelativeLayout {
     private boolean mInfoRefreshing = false;
     private double mAverageCurrent = 0;
     private final WidgetTicker mInfoTicker = new WidgetTicker(this, INFO_REFRESH_MS, this::updateInfoText);
+    private String mPendingInfo;
+    private long mInfoShownAt;
+    private final Runnable mApplyPendingInfo = () -> {
+        if (mPendingInfo != null) showInfoText(mPendingInfo);
+    };
 
     private SuperPowerSaveObserver.SuperPowerSaveListener mSuperPowerSaveListener = superPowerSave -> {
         mSuperPowerSave = superPowerSave;
@@ -300,6 +309,8 @@ public class NowBarBattery extends RelativeLayout {
         }
         mInfoTicker.stop();
         mInfoRefreshing = false;
+        removeCallbacks(mApplyPendingInfo);
+        mPendingInfo = null;
     }
 
     private void animateChargingBackground(int startColor) {
@@ -373,9 +384,41 @@ public class NowBarBattery extends RelativeLayout {
         } else {
             finalText = mExtraLevel + "%";
         }
-        if (finalText.contentEquals(mChargingInfo.getText())) return;
-        mChargingInfo.setText(finalText);
+        setInfoText(finalText, !(mPowerCharged || mIsCharging));
+    }
+
+    private void setInfoText(String text, boolean immediate) {
+        if (text.contentEquals(mChargingInfo.getText())) {
+            mPendingInfo = null;
+            removeCallbacks(mApplyPendingInfo);
+            return;
+        }
+        long wait = immediate ? 0 : mInfoShownAt + marqueePassMs() - SystemClock.uptimeMillis();
+        if (wait > 0) {
+            boolean scheduled = mPendingInfo != null;
+            mPendingInfo = text;
+            if (!scheduled) postDelayed(mApplyPendingInfo, wait);
+            return;
+        }
+        showInfoText(text);
+    }
+
+    private void showInfoText(String text) {
+        removeCallbacks(mApplyPendingInfo);
+        mPendingInfo = null;
+        mChargingInfo.setText(text);
         mChargingInfo.setSelected(true);
+        mInfoShownAt = SystemClock.uptimeMillis();
+    }
+
+    private long marqueePassMs() {
+        Layout layout = mChargingInfo.getLayout();
+        int width = mChargingInfo.getWidth() - mChargingInfo.getCompoundPaddingLeft() - mChargingInfo.getCompoundPaddingRight();
+        if (layout == null || width <= 0) return 0;
+        float lineWidth = layout.getLineWidth(0);
+        if (lineWidth <= width) return 0;
+        float pixelsPerSecond = MARQUEE_DP_PER_SECOND * getResources().getDisplayMetrics().density;
+        return MARQUEE_DELAY_MS + (long) ((lineWidth + width / 3f) / pixelsPerSecond * 1000f);
     }
 
     private int readChargerMillivolts() {
